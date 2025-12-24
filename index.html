@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday My Love ❤️</title>
+
+<style>
+/* ================= RESET ================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* ================= BODY ================= */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    color: #26453d;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+/* ================= SECTION ================= */
+section {
+    min-height: 100vh;
+    padding: 20px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+section.active {
+    display: flex;
+}
+
+/* ================= TEXT ================= */
+h1, h2, h3, h4 {
+    margin: 6px 0;
+}
+
+p {
+    max-width: 500px;
+    margin: 10px auto;
+}
+
+/* ================= FORM ================= */
+input, textarea {
+    width: 260px;
+    padding: 10px;
+    margin: 6px 0;
+    border-radius: 10px;
+    border: none;
+}
+
+/* ================= BUTTON ================= */
+.btn {
+    background: #26453d;
+    color: white;
+    border: none;
+    padding: 12px 26px;
+    border-radius: 25px;
+    cursor: pointer;
+    margin: 8px;
+}
+
+.btn:hover {
+    background: #e73370;
+}
+
+/* ================= IMAGE ================= */
+img {
+    width: 200px;
+    border-radius: 20px;
+    margin: 15px 0;
+}
+
+/* ================= GRID GAME ================= */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(5, 60px);
+    gap: 15px;
+}
+
+.box {
+    width: 60px;
+    height: 60px;
+    background: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* ================= GALLERY ================= */
+.gallery {
+    display: none;
+    grid-template-columns: 1fr;   /* ⬅️ VERTIKAL */
+    gap: 15px;
+    margin-top: 20px;
+    max-width: 400px;             /* biar rapi di tengah */
+}
+
+.gallery img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.gallery img {
+    transition: transform .3s ease;
+}
+
+.gallery img:hover {
+    transform: scale(1.05);
+}
+
+
+/* ================= PROGRESS ================= */
+.progress-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: rgba(255,255,255,.3);
+}
+
+.progress {
+    height: 100%;
+    width: 0%;
+    background: #26453d;
+    transition: .3s;
+}
+
+/* ===== IMAGE MODAL ===== */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 20px;
+}
+
+.modal .close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 35px;
+    color: white;
+    cursor: pointer;
+}
+
+body.night {
+  background: linear-gradient(135deg,#1a1a2e,#16213e);
+  color: #ffd6dc;
+}
+
+body.night .btn {
+  background:#ffd6dc;
+  color:#1a1a2e;
+}
+
+#romanticCountdown {
+  margin-top:10px;
+  font-weight:bold;
+  color:#e73370;
+}
+
+#proposal {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: #ffd6dc;
+}
+
+#proposal h1 {
+    font-size: 22px;
+    max-width: 500px;
+    line-height: 1.6;
+    animation: fadeIn 1.5s;
+}
+
+
+/* ================= CONFETTI ================= */
+.confetti {
+    position: fixed;
+    top: -10px;
+    font-size: 22px;
+    animation: fall 4s linear forwards;
+}
+
+.freeze * {
+    animation-play-state: paused !important;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<audio id="bgMusic" loop>
+    <source src="laguultah.mp3" type="audio/mpeg">
+</audio>
+
+<div class="progress-container">
+    <div class="progress" id="progress"></div>
+</div>
+
+<!-- ================= LOGIN ================= -->
+<section id="login" class="active">
+    <h1>MASUK DULU YA CANTIK 💖</h1>
+    <p>Jangan lupa play music dulu biar tambah rasanya</p>
+    <input id="name" placeholder="Nama lengkap">
+    <input id="password" type="password" placeholder="Password">
+    <button class="btn" onclick="playMusic()">🎵 PLAY MUSIC</button>
+    <button class="btn" onclick="checkLogin()">Masuk</button>
+</section>
+
+<!-- ================= GAME 1 ================= -->
+<section id="game1">
+    <h3>Game 1 💕</h3>
+    <p>Kapan tanggal jadian kita?</p>
+    <input id="answerGame1" placeholder="contoh: 17 Agustus 1945">
+    <button class="btn" onclick="checkGame1()">Jawab</button>
+</section>
+
+<!-- ================= GAME 2 ================= -->
+<section id="game2">
+    <h3>Game 2 💕</h3>
+    <p>Makanan hero ML anime favorit mas?</p>
+    <p>(sesuai contoh)</p>
+    <input id="answerGame2" placeholder="contoh: Bakso Lancelot Bleach">
+    <button class="btn" onclick="checkGame2()">Jawab</button>
+</section>
+
+<!-- ================= GAME 3 ================= -->
+<section id="game3">
+    <h3>Mini Game 💣</h3>
+    <p>Buka 8 kotak aman (2 bom)</p>
+    <div class="grid" id="grid"></div>
+</section>
+
+<!-- ================= MAIN ================= -->
+<section id="main">
+    <h1>MARATUL INAYAH 🎂</h1>
+    <h2>TWENTIES</h2>
+    <p>Selamat ulang tahun yang ke 23 tahun, sayangku!</p>
+    <p>26 Desember 2025</p>
+    <img src="1.png" alt="Foto Cantik">
+    <p id="mainText">Hari ini spesial untukmu 🤍</p>
+
+<!-- ===== NIGHT MODE ===== -->
+<button class="btn" onclick="toggleNight()">NIGHT MODE 🌙</button>
+
+<!-- ===== LOVE PROGRESS ===== -->
+<h3>Cinta Mas ke Adek ❤️</h3>
+<div style="width:260px;height:14px;background:#ffd6dc;border-radius:20px;">
+  <div id="loveBar" style="height:100%;width:0%;background:#e73370;border-radius:20px;"></div>
+</div>
+
+<!-- ===== SECRET LETTER ===== -->
+<button class="btn" id="letterBtn" disabled onclick="openLetter()">BUKA SURAT RAHASIA 💌</button>
+<p id="letterText" style="display:none;max-width:500px;">
+  Adek adalah rumah paling tenang yang pernah mas temukan.  
+  Terima kasih sudah bertahan, tertawa, dan tumbuh bersama mas 🤍
+  Menjadi bagian terbaik di tahun-tahun ini dan akan menjadi bagian yang mas impikan di tahun-tahun mendatang.
+  Terima kasih atas segala narasi dan certia panjang dari alur kehidupan yang penuh misteri ini.
+  Terima kasih selalu menjadi teduh dikala panas menyingsing, menjadi labuhan dikala bagai menerpa.
+  Mengenalmu aku berharap, dekat denganmu aku berencana, memilikimu aku berterima kasih, dan bersama seutuhnya aku merasa cukup.
+</p>
+
+<!-- ===== TIMELINE CINTA ===== -->
+<button class="btn" id="btnTimeline" onclick="toggleTimeline()">TIMELINE KITA 📖</button>
+<div id="timeline" style="display:none;max-width:500px;">
+  <p>📱 Pertama Chat — Deg-degan</p>
+  <p>☕ First Date — Dunia terasa kadang pelan dan kadang cepat</p>
+  <p>🌧️ Bertengkar — Tapi memilih bertahan</p>
+  <p>❤️ Hari Ini — Mas masih jatuh cinta</p>
+</div>
+
+<!-- ===== QUIZ EMOSIONAL ===== -->
+<button class="btn" id="btnFact" onclick="openEmotionQuiz()">IT'S FACT 💭</button>
+<p id="emotionQuiz" style="display:none;">
+  Hal apa yang paling mas takuti?<br>
+  <b>Ketika mas engga bisa buat ade nyaman dan bahagia</b>
+</p>
+
+<!-- ===== COUNTDOWN ===== -->
+<button class="btn" id="btnCountdown" onclick="startRomanticCountdown()">COUNTDOWN 💞</button>
+<p id="romanticCountdown"></p>
+
+<!-- ===== SURPRISE KATA-KATA ===== -->
+<button class="btn" id="btnSurprise" onclick="showSurprise()">OTHERS 🎁</button>
+<p id="surpriseText" style="display:none;">Mas sayang adek hari ini, besok, dan selamanya 💖</p>
+    
+<!-- ===== COPY LINK ===== -->
+<button class="btn" id="btnCopy" onclick="startCountdown()">COPY AND ACCESS THE LINK ⏳</button>
+<p id="countdownText" style="display:none;"></p>
+
+<!-- ===== GALLERY ===== -->
+<button class="btn" onclick="toggleGallery()">GALLERY 📸</button>
+<div class="gallery" id="gallery">
+    <img src="2.png" alt="Foto ade" onclick="openModal(this)">
+    <img src="3.png" alt="Foto ade" onclick="openModal(this)">
+    <img src="4.png" alt="Foto ade" onclick="openModal(this)">
+    <img src="5.png" alt="Foto ade" onclick="openModal(this)">
+    <img src="6.png" alt="Foto ade" onclick="openModal(this)">
+    <img src="7.png" alt="Foto ade" onclick="openModal(this)">
+    <img src="8.png" alt="Foto ade" onclick="openModal(this)">
+</div>
+
+<!-- ===== MOVE PESAN ===== -->
+    <button class="btn" onclick="openSection('message')">KIRIM PESAN 💌</button>
+</section>
+
+<!-- ================= MESSAGE ================= -->
+<section id="message">
+    <h1>Pesan untuk mas 💖</h1>
+    <textarea id="waMessage" rows="5"></textarea>
+    <button class="btn" onclick="sendToWA()">Kirim ke WhatsApp</button>
+    
+<!-- ===== FINAL ENDING ===== -->
+<button class="btn" onclick="startProposal()">FINAL SURPRISE 💍</button>
+</section>
+
+<!-- ===== PROPOSAL SCENE ===== -->
+<section id="proposal">
+    <h1 id="proposalText"></h1>
+    <div id="proposalBtns" style="display:none;">
+        <button class="btn" onclick="acceptProposal()">💖 Iya, aku mau</button>
+        <button class="btn" onclick="needHug()">😳 Aku butuh pelukan dulu</button>
+    </div>
+</section>
+
+<script>
+
+/* ================= GLOBAL ================= */
+let progress = 0;
+
+/* ================= UTIL ================= */
+function openSection(id) {
+    document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+}
+
+function updateProgress() {
+    progress = Math.min(progress + 25, 100);
+    document.getElementById("progress").style.width = progress + "%";
+}
+
+function setMusic(src) {
+    const m = document.getElementById("bgMusic");
+    m.src = src;
+    m.play();
+}
+
+/* ================= LOGIN ================= */
+function playMusic() {
+    const audio = document.getElementById("bgMusic");
+    audio.volume = 1.0;
+    audio.play()
+        .then(() => {
+            console.log("🎵 Musik berjalan");
+        })
+        .catch(err => {
+            alert("Browser menolak audio 😭\nCoba klik sekali lagi");
+            console.error(err);
+        });
+}
+
+function checkLogin() {
+    const name = document.getElementById("name").value.trim();
+    const pass = document.getElementById("password").value.trim();
+    if (!name || pass !== "995377") {
+        alert("Nama atau password salah 😜");
+        return;
+    }
+    localStorage.setItem("playerName", name);
+    openSection("game1");
+}
+
+const nameInput = () => document.getElementById("name").value.trim();
+const passwordInput = () => document.getElementById("password").value.trim();
+
+/* ================= GAME 1 ================= */
+function checkGame1() {
+    const ans = answer("answerGame1");
+    if (!ans) return alert("Jawab dulu 😆");
+    if (ans.includes("15") && ans.includes("Oktober") && ans.includes("2022")) {
+        updateProgress();
+        openSection("game2");
+    } else alert("Masih salah 😝");
+}
+
+/* ================= GAME 2 ================= */
+function checkGame2() {
+    const ans = answer("answerGame2");
+    if (!ans) return alert("Jawab dulu 😆");
+
+    if (ans.includes("Mie Ayam") && ans.includes("Yi Sun-Shin") && ans.includes("Naruto")) {
+        updateProgress();
+        openSection("game3");
+        initGame();
+    } else alert("Masih salah 😝");
+}
+
+const answer = id =>
+    document.getElementById(id).value.trim();
+
+/* ================= GAME 3 FINAL ================= */
+
+// ===== GLOBAL STATE =====
+let bombs = [];
+let opened = 0;
+let game3Attempts = 0;
+
+const MAX_ATTEMPTS = 5;
+let mercyMode = false;
+
+// ===== INIT GAME =====
+function initGame() {
+    game3Attempts++;
+
+    bombs = [];
+    opened = 0;
+
+    const grid = document.getElementById("grid");
+    grid.innerHTML = "";
+
+    // MERCY MODE AKTIF DI PERCOBAAN KE-6
+    if (game3Attempts > MAX_ATTEMPTS) {
+        mercyMode = true;
+        updateGame3Text(
+            "😆 YAHH, UDAH 5 KALI BELUM SELESAI NIH?<br>" +
+            "YA UDH, SEKARANG MAS GANTI SEMUA BOM JADI HATI 💖"
+        );
+    } else {
+        mercyMode = false;
+        updateGame3Text(`Percobaan ke-${game3Attempts}. Semangat ya 💪`);
+    }
+
+    // BUAT BOM HANYA JIKA BUKAN MERCY MODE
+    if (!mercyMode) {
+        while (bombs.length < 2) {
+            const r = Math.floor(Math.random() * 10);
+            if (!bombs.includes(r)) bombs.push(r);
+        }
+    }
+
+    // BUAT GRID
+    for (let i = 0; i < 10; i++) {
+        const box = document.createElement("div");
+        box.className = "box";
+        box.textContent = "?";
+        box.onclick = () => openBox(i, box);
+        grid.appendChild(box);
+    }
+}
+
+// ===== OPEN BOX =====
+function openBox(i, box) {
+    // JIKA BOM DAN BUKAN MERCY MODE → GAGAL
+    if (!mercyMode && bombs.includes(i)) {
+        alert("BOOM 💥 Kirim pap 😜");
+        initGame();
+        return;
+    }
+
+    // BUKA BOX
+    box.textContent = "❤️";
+    box.style.pointerEvents = "none";
+    opened++;
+
+    // MENANG (10 BOX - 2 BOM = 8)
+    if (opened === 8 || mercyMode && opened === 10) {
+        updateProgress();
+        confetti();
+        openSection("main");
+    }
+}
+
+// ===== UPDATE TEKS =====
+function updateGame3Text(text) {
+    const el = document.getElementById("game3Text");
+    if (el) el.innerHTML = text;
+}
+
+
+/* ================= MAIN ================= */
+function showSurprise() {
+  document.getElementById("surpriseText").style.display = "block";
+  document.getElementById("mainText").textContent =
+    "Hari ini milikmu, dan hatiku juga 💕";
+  addLove("surprise");
+}
+
+function copyFallback(text) {
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.style.position = "fixed";
+  textarea.style.opacity = "0";
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand("copy");
+  document.body.removeChild(textarea);
+}
+
+function startCountdown() {
+  let timeLeft = 5;
+  const el = document.getElementById("countdownText");
+  el.style.display = "block";
+
+  const targetLink = "https://ardnptraa.github.io/harapankita/";
+
+  const timer = setInterval(() => {
+    el.textContent = `Link akan muncul dalam ${timeLeft}...`;
+    timeLeft--;
+
+    if (timeLeft < 0) {
+      clearInterval(timer);
+
+      el.innerHTML = `
+        <b>Salin link ini ya 💖</b><br>
+        <input 
+          type="text" 
+          value="${targetLink}" 
+          readonly 
+          onclick="this.select()"
+          style="
+            width:260px;
+            padding:8px;
+            border-radius:10px;
+            border:none;
+            text-align:center;
+            margin-top:8px;
+          "
+        >
+        <p style="font-size:12px;margin-top:5px;">
+          (klik lalu tahan → copy)
+        </p>
+      `;
+
+      addLove("copy");
+    }
+  }, 1000);
+}
+
+function toggleGallery() {
+    const g = document.getElementById("gallery");
+    g.style.display = g.style.display === "grid" ? "none" : "grid";
+}
+
+/* ===== LOVE BAR SYSTEM (FIXED) ===== */
+let love = 0;
+
+const loveAction = {
+  timeline: false,
+  fact: false,
+  countdown: false,
+  surprise: false,
+  copy: false
+};
+
+function addLove(action) {
+  if (loveAction[action]) return;
+
+  loveAction[action] = true;
+  love += 20;
+  if (love > 100) love = 100;
+
+  document.getElementById("loveBar").style.width = love + "%";
+
+  // disable tombol setelah dipakai
+  const btnMap = {
+    timeline: "btnTimeline",
+    fact: "btnFact",
+    countdown: "btnCountdown",
+    surprise: "btnSurprise",
+    copy: "btnCopy"
+  };
+  document.getElementById(btnMap[action]).disabled = true;
+
+  // buka surat rahasia jika penuh
+  if (love === 100) {
+    document.getElementById("letterBtn").disabled = false;
+  }
+}
+
+/* ===== LETTER ===== */
+function openLetter() {
+  document.getElementById("letterText").style.display = "block";
+}
+
+/* ===== TIMELINE ===== */
+function toggleTimeline() {
+  const t = document.getElementById("timeline");
+  t.style.display = t.style.display === "block" ? "none" : "block";
+  addLove("timeline");
+}
+
+/* ===== QUIZ ===== */
+function openEmotionQuiz() {
+  document.getElementById("emotionQuiz").style.display = "block";
+  addLove("fact");
+}
+
+/* ===== COUNTDOWN ===== */
+function startRomanticCountdown() {
+  let t = 7;
+  const el = document.getElementById("romanticCountdown");
+
+  el.innerText = `Mas mencintaimu dalam ${t}...`;
+
+  const timer = setInterval(() => {
+    t--;
+    el.innerText = `Mas mencintaimu dalam ${t}...`;
+
+    if (t <= 0) {
+      clearInterval(timer);
+      el.innerText = "Dan akan terus begitu 💖";
+      confetti();
+      addLove("countdown");
+    }
+  }, 1000);
+}
+
+/* ===== NIGHT MODE ===== */
+function toggleNight() {
+  document.body.classList.toggle("night");
+}
+
+/* ===== FINAL SCENE ===== */
+function finalScene() {
+  document.body.innerHTML = `
+    <div style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;">
+      <h1>Terima kasih sudah lahir 🤍</h1>
+      <p>Kamu adalah keputusan terbaik mas.</p>
+    </div>
+  `;
+  confetti();
+}
+
+/* ================= CONFETTI ================= */
+function confetti() {
+    for (let i = 0; i < 40; i++) {
+        const c = document.createElement("div");
+        c.className = "confetti";
+        c.textContent = "🎉";
+        c.style.left = Math.random() * 100 + "vw";
+        c.style.animationDuration = "4s";
+        document.body.appendChild(c);
+    }
+}
+
+/* ================= WA ================= */
+function sendToWA() {
+    const msg = document.getElementById("waMessage").value.trim();
+    if (!msg) return alert("Pesan kosong 😘");
+
+    const name = localStorage.getItem("playerName") || "Sayang";
+    const phone = "6285606186250";
+    window.open(
+        `https://wa.me/${phone}?text=${encodeURIComponent(`Dari ${name}\n\n${msg}`)}`,
+        "_blank", "noopener"
+    );
+}
+
+function startProposal() {
+    openSection("proposal");
+
+    const text = [
+        "Adek…",
+        "Mas nggak janji hidup yang sempurna.",
+        "Tapi mas janji hadir,",
+        "setiap kamu lelah,",
+        "setiap kamu ragu,",
+        "dan setiap kamu butuh pulang.",
+        "",
+        "Maukah kamu…",
+        "menjadi rumah mas selamanya?"
+    ];
+
+    let i = 0;
+    const el = document.getElementById("proposalText");
+    el.innerHTML = "";
+
+    const typing = setInterval(() => {
+        el.innerHTML += text[i] + "<br>";
+        i++;
+        if (i === text.length) {
+            clearInterval(typing);
+            document.getElementById("proposalBtns").style.display = "block";
+            confetti();
+        }
+    }, 900);
+}
+
+function acceptProposal() {
+    if (sessionStorage.getItem("proposalDone")) return;
+    sessionStorage.setItem("proposalDone", "yes");
+
+    // 1. Freeze confetti
+    document.body.classList.add("freeze");
+
+    // 2. Sembunyikan tombol
+    document.getElementById("proposalBtns").style.display = "none";
+
+    // 3. Confetti jatuh
+    confetti();
+
+    // 4. Screenshot momen
+    setTimeout(() => {
+        takeScreenshot();
+    }, 800);
+    
+    const message = `
+Nduk mau
+Nduk nggak tahu bagaimana menjelaskan rasanya…
+tapi nduk yakin satu hal.
+
+Nduk mau berjalan bareng mas,
+jatuh, bangun, dan tumbuh bersama.
+
+Nduk bilang iya`;
+
+    const phoneNumber = "6285606186250"; // GANTI nomor kamu
+    const waUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+
+    document.getElementById("proposalText").innerHTML =
+        "💍 Terima kasih sudah bilang iya 🤍<br>Mas tunggu jawabanmu di WhatsApp…";
+
+    document.getElementById("proposalBtns").style.display = "none";
+    confetti();
+
+    setTimeout(() => {
+        window.open(waUrl, "_blank", "noopener");
+    }, 4000);
+}
+
+function needHug() {
+    alert("Mas di sini 🤍 Peluk virtual dulu ya…");
+}
+
+function takeScreenshot() {
+    const body = document.body;
+
+    html2canvas(body).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "lamaran-kita.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+    });
+}
+
+function openModal(img) {
+    document.getElementById("imgModal").style.display = "flex";
+    document.getElementById("modalImg").src = img.src;
+}
+
+function closeModal() {
+    document.getElementById("imgModal").style.display = "none";
+}
+
+</script>
+
+<!-- MODAL ZOOM -->
+<div id="imgModal" class="modal">
+    <span class="close" onclick="closeModal()">×</span>
+    <img id="modalImg">
+</div>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</body>
+</html>
